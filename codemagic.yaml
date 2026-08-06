@@ -1,0 +1,20 @@
+workflows:
+  dotnet-maui-android:
+    name: .NET MAUI Android Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      vars:
+        XCODE_WORKSPACE: "YourWorkspace.xcworkspace" # À modifier si besoin
+        XCODE_SCHEME: "YourScheme" # À modifier si besoin
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install .NET MAUI workload
+        script: |
+          dotnet workload install maui
+      - name: Build Android
+        script: |
+          dotnet build -c Release -f net8.0-android
+    artifacts:
+      - artifacts/android/app/build/outputs/apk/**/*.apk
