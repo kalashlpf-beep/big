@@ -4,15 +4,19 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m1
     environment:
+      groups:
+        - dotnet
       vars:
-        XCODE_WORKSPACE: "YourWorkspace.xcworkspace" # À modifier si besoin
-        XCODE_SCHEME: "YourScheme" # À modifier si besoin
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Install .NET MAUI workload
+      - name: Install .NET SDK and MAUI Workload
         script: |
-          dotnet workload install maui
+          # Installation explicite de .NET 8 si non présent
+          brew install --cask dotnet-sdk
+          # Installation du workload avec les droits administrateur
+          sudo dotnet workload install maui --source https://nuget.org
       - name: Build Android
         script: |
           dotnet build -c Release -f net8.0-android
